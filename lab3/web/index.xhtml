@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" >
+<f:view>
+   <h:head>
+      <title>Начальная страница</title>
+      <h:outputStylesheet name="css/style.css"/>
+      <h:outputScript name="javaScript/jquery-3.4.1.min.js"/>
+      <script type="text/javascript">
+         //<![CDATA[
+         $(document).ready(function () {
+            function clock() {
+               var d = new Date();
+               var month=d.getMonth()+1;
+               var day = d.getDate();
+               var hrs = d.getHours();
+               var min = d.getMinutes();
+               var sec = d.getSeconds();
+               if (month<=9) month="0"+ month;
+               if (day <= 9) day="0" + day;
+               if (hrs <= 9) hrs="0" + hrs;
+               if (min <=9 ) min="0" + min;
+               if (sec <= 9) sec="0" + sec;
+               $("#time").html("Сейчас: " + hrs + ":" + min + ":" + sec + "&nbsp;&nbsp;&nbsp;" +
+                       day + "."+month + "." + d.getFullYear() + " г.");
+            }
+            clock();
+            setInterval(clock,11000);
+         });
+         //]]>
+      </script>
+   </h:head>
+   <h:body>
+      <div id="header">Трушкина Вера, вариант 213980</div>
+      <div id="tabs" align="center">
+         <div id="time"></div>
+         <div id="description">
+            <h1>The 3rd act of violence </h1>
+            <h:link outcome="nextPage" value="Перейти на страницу с графиком"/>
+         </div>
+      </div>
+   </h:body>
+</f:view>
+</html>

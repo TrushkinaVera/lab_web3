@@ -1,0 +1,28 @@
+html,body{
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: "Andale Mono", monospace;
+    color: #555;
+    background-color: #C0FDFB;
+}
+#header {
+    background-color: #64B6AC;
+    text-align: center;
+    font-family: cursive;
+    font-size: 20px;
+    padding: 0.5%;
+    border-bottom: #5D737E 3px solid;
+    margin: 0;
+}
+
+#tabs {
+    min-width: 320px;
+    max-width: 800px;
+    margin: 5% auto;
+    padding: 15px;
+    background: #FCFFFD;
+    border: 1px solid #ddd;
+    border-top: 1px solid #5d737e;
+}

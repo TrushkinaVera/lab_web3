@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui"
+      xmlns:h5="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.icefaces.org/icefaces/components">
+<f:view>
+    <h:head>
+        <title>Second Page Title</title>
+        <h:outputStylesheet name="css/second.css"/>
+        <h:outputScript name="javaScript/jquery-3.4.1.min.js"/>
+    </h:head>
+    <h:body>
+        <div id="div" class="tabs" align="center">
+            <h:panelGroup id="content-tab1">
+                <h:form id="form" prependId="false">
+                    <h:panelGrid columns="2" id="maket">
+                        <h:panelGrid columns="1" styleClass="column">
+                            <h:outputText value="X" styleClass="thTitle"/>
+                            <h:inputHidden id="valueX" value="#{mainBean.x}"/>
+                            <h:panelGrid id="x" columns="10" styleClass="column">
+                                <h:commandLink id="x1" value="-3" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x2" value="-2" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x3" value="-1" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x4" value="0" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x5" value="1" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x6" value="2" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x7" value="3" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x8" value="4" styleClass="buttonR buttonX"/>
+                                <h:commandLink id="x9" value="5" styleClass="buttonR buttonX"/>
+                                <h:outputText id="errorX" title="Выберите одно из значений!" value="!" style="color:red"/>
+                            </h:panelGrid>
+                            <h:outputText value="Y" styleClass="thTitle"/>
+                            <h:inputText id="y" title="y" maxlength="15"
+                                         value="#{mainBean.y}" required="true">
+                            </h:inputText>
+                            <h:message id="errorY" for="y" style="color: red"/>
+                            <h:inputHidden id="valueR" value="#{mainBean.r}"/>
+                            <h:outputText value="R" styleClass="thTitle"/>
+                            <h:panelGrid columns="6" styleClass="column">
+                                <h:commandButton id="r1" value="1" type="button" styleClass="button buttonR"/>
+                                <h:commandButton id="r2" value="2" type="button" styleClass="button buttonR"/>
+                                <h:commandButton id="r3" value="3" type="button" styleClass="button buttonR"/>
+                                <h:commandButton id="r4" value="4" type="button" styleClass="button buttonR"/>
+                                <h:commandButton id="r5" value="5" type="button" styleClass="button buttonR"/>
+                                <h:outputText id="errorR" title="Выберите одно из значений!" value="!" style="color:red"/>
+                            </h:panelGrid>
+                            <h:inputTextarea id="log" cols="32" rows="10" readonly="true"/>
+                            <p:remoteCommand name="myCommand" actionListener="#{mainBean.addPoint()}" style="display: none;" update=":contet-result"/>
+                            <h:commandButton styleClass="button" type="button" value="Проверить" onclick="addPoint();"/>
+                            <p:remoteCommand name="newPoints" actionListener="#{mainBean.addNewPoints()}" style="display: none;" update=":content-tab2"/>
+                            <h:link outcome="returnPage" value="Назад на стартовую страницу"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" styleClass="column">
+                            <h:outputText value="Выберите радиус и кликните на график"/>
+                            <canvas id="canvas" width="400" height="400">Здесь должен быть канвас</canvas>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGroup>
+            <div id="content">
+                <h:panelGroup id="contet-result">
+                    <h:dataTable id="result" var="point" value="#{mainBean.getPoints()}" rendered="#{not empty mainBean.getPoints()}">
+                        <h:column>
+                            <f:facet name="header">X</f:facet>
+                            #{point.x}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Y</f:facet>
+                            #{point.y}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">R</f:facet>
+                            #{point.r}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Result</f:facet>
+                            #{point.result}
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </div>
+            <div id="content2">
+                <h:panelGroup id="content-tab2">
+                    <h:dataTable id="newPoints" var="point" value="#{mainBean.getNewPoints()}" rendered="#{not empty mainBean.getNewPoints()}" >
+                        <h:column>
+                            <f:facet name="header">X</f:facet>
+                            #{point.x}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Y</f:facet>
+                            #{point.y}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">R</f:facet>
+                            #{point.r}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Result</f:facet>
+                            #{point.result}
+                        </h:column>
+                    </h:dataTable>
+                </h:panelGroup>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+            var R=-1;
+            $(document).ready(function(){
+                document.getElementById("y").value="";
+                document.getElementById("x1").onclick=function () {
+                    document.getElementById("valueX").value="-3";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x2").onclick=function () {
+                    document.getElementById("valueX").value="-2";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x3").onclick=function () {
+                    document.getElementById("valueX").value="-1";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x4").onclick=function () {
+                    document.getElementById("valueX").value="0";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x5").onclick=function () {
+                    document.getElementById("valueX").value="1";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x6").onclick=function () {
+                    document.getElementById("valueX").value="2";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x7").onclick=function () {
+                    document.getElementById("valueX").value="3";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x8").onclick=function () {
+                    document.getElementById("valueX").value="4";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("x9").onclick=function () {
+                    document.getElementById("valueX").value="5";
+                    $('#errorX').hide();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    this.setAttribute("style","background-color:yellow");
+                    document.getElementById("errorX").title="Выбранное значение";
+                    return false;
+                };
+                document.getElementById("r1").onclick=function () {
+                    document.getElementById("valueR").value="1";
+                    if (R===1) return false;
+                    else {
+                        var xx=$("input[type=\"button\"]");
+                        for (var i=0;i<xx.length;i++){
+                            xx[i].removeAttribute("style");
+                        }
+                        this.setAttribute("style","background-color:yellow");
+                        R = 1;
+                        changeR();
+                        $('#errorR').hide();
+                        return false;
+                    }
+                };
+                document.getElementById("r2").onclick=function () {
+                    document.getElementById("valueR").value="2";
+                    if (R===2) return false;
+                    else {
+                        var xx=$("input[type=\"button\"]");
+                        for (var i=0;i<xx.length;i++){
+                            xx[i].removeAttribute("style");
+                        }
+                        this.setAttribute("style","background-color:yellow");
+                        R = 2;
+                        changeR();
+                        $('#errorR').hide();
+                        return false;
+                    }
+                };
+                document.getElementById("r3").onclick=function () {
+                    document.getElementById("valueR").value="3";
+                    if (R===3) return false;
+                    else {
+                        var xx=$("input[type=\"button\"]");
+                        for (var i=0;i<xx.length;i++){
+                            xx[i].removeAttribute("style");
+                        }
+                        this.setAttribute("style","background-color:yellow");
+                        R = 3;
+                        changeR();
+                        $('#errorR').hide();
+                        return false;
+                    }
+                };
+                document.getElementById("r4").onclick=function () {
+                    document.getElementById("valueR").value="4";
+                    if (R===4) return false;
+                    else {
+                        var xx=$("input[type=\"button\"]");
+                        for (var i=0;i<xx.length;i++){
+                            xx[i].removeAttribute("style");
+                        }
+                        this.setAttribute("style","background-color:yellow");
+                        R = 4;
+                        changeR();
+                        $('#errorR').hide();
+                        return false;
+                    }
+                };
+                document.getElementById("r5").onclick=function () {
+                    document.getElementById("valueR").value="5";
+                    if (R===5) return false;
+                    else {
+                        var xx=$("input[type=\"button\"]");
+                        for (var i=0;i<xx.length;i++){
+                            xx[i].removeAttribute("style");
+                        }
+                        this.setAttribute("style","background-color:yellow");
+                        R = 5;
+                        changeR();
+                        $('#errorR').hide();
+                        return false;
+                    }
+                };
+                var canvas = document.getElementById("canvas");
+                var graphic = canvas.getContext("2d");
+                graphic.beginPath();
+                graphic.moveTo(0,240);
+                graphic.lineTo(400,240);
+                graphic.lineTo(395,235);
+                graphic.moveTo(400,240);
+                graphic.lineTo(395,245);
+                graphic.moveTo(160,240);
+                graphic.lineTo(160,400);
+                graphic.lineTo(160,0);
+                graphic.lineTo(155,5);
+                graphic.moveTo(160,0);
+                graphic.lineTo(165,5);
+                graphic.fillStyle='black';
+                graphic.stroke();
+                graphic.closePath();
+                var x;
+                var y;
+                canvas.addEventListener("click",draw,false);
+                function draw(e) {
+                    if (R===-1){
+                        document.getElementById("log").value="";
+                        document.getElementById("log").value+="Выберите радиус R!\n";
+                    }else{
+                        if (e.clientX !== undefined && e.clientY !== undefined) {
+                            x = e.clientX;
+                            y = e.clientY;
+                        }
+                        x =x- canvas.getBoundingClientRect().left;
+                        y =y- canvas.getBoundingClientRect().top;
+                        graphic.beginPath();
+                        graphic.arc(x, y, 5, 0,Math.PI*2,false);
+                        x=(x-160)/40;
+                        y=(-1)*(y-240)/40;
+                        document.getElementById("valueX").value=x.toString();
+                        document.getElementById("y").value=y.toString();
+                        myCommand();
+                        $('#content').bind("DOMSubtreeModified",function(){
+                            var answer=$("#result tbody td").last().text().trim();
+                            if (answer=="true") graphic.fillStyle = 'green';
+                            else graphic.fillStyle = 'red';
+                            graphic.fill();
+                            $('#contet-result').show();
+                            $("#errorX").show();
+                            document.getElementById("valueX").value="";
+                            document.getElementById("y").value="";
+                        });
+                    }
+                }
+                function changeR() {
+                    document.getElementById("log").value="";
+                    graphic.clearRect(0,0,400,400);
+                    graphic.beginPath();
+                    graphic.moveTo(160-R*20,240);//graphic.moveTo(50+(3-R)*30,150);
+                    graphic.lineTo(160,240);
+                    graphic.lineTo(160,240-R*20);//graphic.lineTo(150,150+R*30);
+                    graphic.fillStyle='blue';
+                    graphic.fill();
+                    graphic.fillRect(160,240-R*40,R*40,R*40);
+                    graphic.moveTo(160,240);
+                    graphic.arc(160, 240, R*20, -3*Math.PI/2, 0, true);
+                    graphic.fillStyle='blue';
+                    graphic.fill();
+                    graphic.closePath();
+                    graphic.beginPath();
+                    graphic.fillStyle='black';
+                    graphic.moveTo(0,240);
+                    graphic.lineTo(400,240);
+                    graphic.lineTo(395,235);
+                    graphic.moveTo(400,240);
+                    graphic.lineTo(395,245);
+                    graphic.moveTo(160,240);
+                    graphic.lineTo(160,400);
+                    graphic.lineTo(160,0);
+                    graphic.lineTo(155,5);
+                    graphic.moveTo(160,0);
+                    graphic.lineTo(165,5);
+                    var i=0;
+                    while (i<400){
+                        if (i!==160){
+                            graphic.moveTo(i,230);
+                            graphic.lineTo(i,250);}
+                        if (i!==200){
+                            graphic.moveTo(150,i+40);
+                            graphic.lineTo(170,i+40);}
+                        i=i+40;
+                    }
+                    graphic.stroke();
+                    graphic.closePath();
+                    points();
+                }
+                function points() {
+                    if (document.getElementById("y").value==""){
+                        document.getElementById("y").value=".";
+                    }
+                    if (document.getElementById("valueX").value==""){
+                        document.getElementById("valueX").value=".";
+                    }
+                    newPoints();
+                    if (document.getElementById("y").value=="."){
+                        document.getElementById("y").value="";
+                    }
+                    if (document.getElementById("valueX").value=="."){
+                        document.getElementById("valueX").value="";
+                    }
+                    $('#content2').bind("DOMSubtreeModified",function(){
+                        var rows = $('#newPoints').find('tr');
+                        var number = rows.length;
+                        var r;
+                        graphic.beginPath();
+                        for(var i = 1; i < number; i++){
+                            var tdSet = $(rows[i]).find('td');
+                            if (i===1){r = Number($(tdSet[2]).text().trim());}
+                            var x=Number($(tdSet[0]).text().trim());
+                            var y=Number($(tdSet[1]).text().trim());
+                            if ($(tdSet[3]).text().trim() == 'true') {
+                                graphic.fillStyle = 'green';
+                            } else {
+                                graphic.fillStyle = 'red';
+                            }
+                            graphic.beginPath();
+                            graphic.arc(160+x*40, 240-y*40, 5, 0,Math.PI*2,false);
+                            graphic.fill();
+                            graphic.closePath();
+                        }
+                    });
+                }
+            });
+            function addPoint() {
+                if (!checkPoint()) return false;
+                else{
+                    document.getElementById("errorX").title="Выберите одно из значений!";
+                    myCommand();
+                    document.getElementById("valueX").value="";
+                    document.getElementById("y").value="";
+                    $('#errorX').show();
+                    $('#contet-result').show();
+                    var xx=document.getElementsByTagName("a");
+                    for (var i=0;i<xx.length;i++){
+                        xx[i].removeAttribute("style");
+                    }
+                    return false;}
+            }
+            function checkPoint() {
+                y = document.getElementById('y').value;
+                valid = true;
+                document.getElementById("log").value="";
+                //y.match(/[+-]?(([0-4]([,.][0-9]{0,3})?)|(5([,.](0){0,3})?))/)
+                if (y==='') {
+                    document.getElementById("log").value+="Вы не выбрали координату Y!\n";
+                    valid = false;
+                }else if (/[^0-9.,+-]/.test(y)){
+                    valid=false;
+                    document.getElementById("log").value+="В поле Y допустимы только цифры, знак минуса/плюса и точка/запятая.\n";
+                }else if (!/^[-+]?([0-2]([.,]\d+)?)$/.test(y)){
+                    valid=false;
+                    document.getElementById("log").value+="В поле Y введено число не из заданного диапазона (-3;3).\n";
+                }
+                if ($('#errorX').attr("title")=="Выберите одно из значений!"){document.getElementById("log").value+="Не выбрана координата X.\n";valid=false;}
+                if (R===-1){document.getElementById("log").value+="Не выбран радиус R.\n";valid=false;}
+                return valid;
+            }
+            //]]>
+        </script>
+    </h:body>
+</f:view>
+</html>
